@@ -1,5 +1,7 @@
 import customtkinter as ctk
 from settings import *
+from GameFrameClass import GameFrame
+from customWidgets.IntegerInputClass import IntegerInput
 
 
 class App(ctk.CTk):
@@ -7,7 +9,52 @@ class App(ctk.CTk):
         super().__init__()
         self.geometry(f'{WIN_WIDTH}x{WIN_HEIGHT}')
         self.title(TITLE)
+
+        self.com_score = ctk.StringVar(value='0')
+        self.user_score = ctk.StringVar(value='0')
+
+        self.game_frame = GameFrame(master=self, com_score=self.com_score, user_score=self.user_score)
+
+        self.welcome_frame = ctk.CTkFrame(master=self)
+        self.welcome_frame.pack(expand=True, fill='both')
+
+        self.pruning_option_var = ctk.StringVar(value='without pruning')
+        self.k_value = ctk.StringVar(value='1')
+
+        self.set_welcome_frame()
+
         self.mainloop()
+
+    def set_welcome_frame(self):
+        self.welcome_frame.rowconfigure((0, 1, 2), weight=1, uniform='a')
+        self.welcome_frame.columnconfigure((0, 1, 2, 3), weight=1, uniform='b')
+
+        title_label = ctk.CTkLabel(master=self.welcome_frame, text='Connect Four',
+                                   font=ctk.CTkFont(size=100))
+        title_label.grid(row=0, column=1, columnspan=2, stick='nsew')
+
+        input_frame = ctk.CTkFrame(master=self.welcome_frame, fg_color='transparent')
+        input_frame.grid(row=1, column=1, rowspan=2, columnspan=2, stick='nsew', pady=30)
+
+        label = ctk.CTkLabel(master=input_frame, text='Choose game configurations')
+        label.pack(padx=10, pady=10)
+
+        seg_btn = ctk.CTkSegmentedButton(master=input_frame, values=['With pruning', 'without pruning'],
+                                         variable=self.pruning_option_var)
+        seg_btn.pack(padx=10, pady=10)
+
+        k_entry = IntegerInput(master=input_frame, var=self.k_value)
+        k_entry.pack(padx=10, pady=10)
+
+        start_btn = ctk.CTkButton(master=input_frame, text='start game',
+                                  command=self.start_game)
+        start_btn.pack(padx=10, pady=10)
+
+    def start_game(self):
+        self.welcome_frame.pack_forget()
+        self.game_frame.pack(expand=True, fill='both')
+        print(self.k_value.get())
+        print(self.pruning_option_var.get())
 
 
 if __name__ == '__main__':
