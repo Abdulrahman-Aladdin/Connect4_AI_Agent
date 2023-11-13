@@ -2,6 +2,7 @@ import customtkinter as ctk
 from settings import *
 from GameFrameClass import GameFrame
 from customWidgets.IntegerInputClass import IntegerInput
+from controller.ControllerClass import Controller
 
 
 class App(ctk.CTk):
@@ -12,8 +13,12 @@ class App(ctk.CTk):
 
         self.com_score = ctk.StringVar(value='0')
         self.user_score = ctk.StringVar(value='0')
+        self.state_value = ctk.StringVar(value='')
 
-        self.game_frame = GameFrame(master=self, com_score=self.com_score, user_score=self.user_score)
+        self.controller = Controller()
+
+        self.game_frame = GameFrame(master=self, com_score=self.com_score, user_score=self.user_score,
+                                    state_value=self.state_value, agent_fn=self.get_agent_play)
 
         self.welcome_frame = ctk.CTkFrame(master=self)
         self.welcome_frame.pack(expand=True, fill='both')
@@ -53,8 +58,14 @@ class App(ctk.CTk):
     def start_game(self):
         self.welcome_frame.pack_forget()
         self.game_frame.pack(expand=True, fill='both')
-        print(self.k_value.get())
-        print(self.pruning_option_var.get())
+        self.controller.initiate_agent(self.k_value.get(), self.pruning_option_var.get())
+
+    def get_agent_play(self, state):
+        column, user_score, agent_score, state_value = self.controller.agent_turn(state)
+        self.user_score.set(f'{user_score}')
+        self.com_score.set(f'{agent_score}')
+        self.state_value.set(state_value)
+        self.game_frame.upper_frame.play_at(column)
 
 
 if __name__ == '__main__':

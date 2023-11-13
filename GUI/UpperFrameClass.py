@@ -1,31 +1,31 @@
 import customtkinter as ctk
-from customWidgets.MainFrameClass import MainFrame
 from PIL import Image
 
 
 class UpperFrame(ctk.CTkFrame):
-    def __init__(self, com_score, user_score, **kwargs):
+    def __init__(self, agent_fn, **kwargs):
         super().__init__(**kwargs)
 
         self.board_frame = ctk.CTkFrame(master=self, fg_color='#12a', corner_radius=20)
         self.board_frame.place(relx=.5, rely=.5, anchor='center')
+
+        # initialize required variables
         self.row = 6
         self.col = 7
-        self.com_score = com_score
-        self.user_score = user_score
         self.turn = 1
+        self.img_size = 80
+        self.red_img = ctk.CTkImage(Image.open('red_circle.png'), size=(self.img_size, self.img_size))
+        self.blue_img = ctk.CTkImage(Image.open('blue_circle.png'), size=(self.img_size, self.img_size))
+        self.img = ctk.CTkImage(Image.open('oval.png'), size=(self.img_size, self.img_size))
+        self.agent_fn = agent_fn
+
+        # initialize the back-board
+        self.board = [['e' for _ in range(self.col)] for _ in range(self.row)]
 
         self.rowconfigure(tuple(range(self.row + 1)), weight=1, uniform='a')
         self.columnconfigure(tuple(range(self.col)), weight=1, uniform='b')
-        self.img_size = 80
-        self.board = [[0 for _ in range(self.col)] for _ in range(self.row)]
-        self.red_img = ctk.CTkImage(Image.open('red_circle.png'),
-                                    size=(self.img_size, self.img_size))
-        self.blue_img = ctk.CTkImage(Image.open('blue_circle.png'),
-                                     size=(self.img_size, self.img_size))
-        self.img = ctk.CTkImage(Image.open('oval.png'),
-                                size=(self.img_size, self.img_size))
 
+        # initialize the ui-board
         for i in range(self.col):
             ctk.CTkLabel(master=self.board_frame, text=f'{i+1}', corner_radius=20).grid(row=0, column=i, stick='nsew')
 
@@ -39,22 +39,36 @@ class UpperFrame(ctk.CTkFrame):
 
     def play_at(self, i):
         for j in range(self.row - 1, -1, -1):
-            if self.board[j][i] == 0:
-                if self.turn == 1:  # user turn
-                    self.board_btns[j][i].configure(image=self.red_img)
-                    self.board[j][i] = 1
-                    self.turn = -1
-                else:
-                    self.board_btns[j][i].configure(image=self.blue_img)
-                    self.board[j][i] = -1
-                    self.turn = 1
+            if self.board[j][i] == 'e':     # found an empty place in that column
+                self.setTheNewState(j, i)   # update the ui, back-board, and the turn
                 break
 
-        if all(cell != 0 for row in self.board for cell in row):
+        if self.isTheGameEnded():
             print('game over!')
-            for row in self.board_btns:
-                for btn in row:
-                    btn.configure(state='disabled')
+            self.disableInteractions()
 
-    def evaluate(self, i, j):
-        pass
+    def isTheGameEnded(self):
+        return all(cell != 'e' for row in self.board for cell in row)
+
+    def disableInteractions(self):
+        for row in self.board_btns:
+            for btn in row:
+                btn.configure(state='disabled')
+
+    def enableInteractions(self):
+        for row in self.board_btns:
+            for btn in row:
+                btn.configure(state='normal')
+
+    def setTheNewState(self, i, j):
+        if self.turn == 1:  # user turn
+            self.board_btns[i][j].configure(image=self.red_img)
+            self.board[i][j] = 'r'
+            self.turn = -1
+            self.disableInteractions()
+            self.agent_fn(self.board)
+        else:
+            self.board_btns[i][j].configure(image=self.blue_img)
+            self.board[i][j] = 'b'
+            self.turn = 1
+            self.enableInteractions()
