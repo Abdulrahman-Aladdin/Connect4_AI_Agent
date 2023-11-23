@@ -1,3 +1,9 @@
+import customtkinter as ctk
 TITLE = 'CONNECT-FOUR'
 WIN_WIDTH = 1400
 WIN_HEIGHT = 1000
+
+FONT_FAMILY = 'Potti Sreeramulu'
+LARGE_FONT_SIZE = 100
+MEDIUM_FONT_SIZE = 30
+SMALL_FONT_SIZE = 20
