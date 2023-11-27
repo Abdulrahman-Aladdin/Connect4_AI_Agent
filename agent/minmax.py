@@ -31,6 +31,7 @@ def min_max_no_pruning(board, depth, turn):
 
 
 def min_max_pruning(board, depth, turn, alpha, beta):
+    print(maxDepth)
     if depth == maxDepth or leafNode(board):
         return evalFunction(board), board
 
