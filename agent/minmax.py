@@ -4,7 +4,9 @@ MAXNUMBER = 1e9
 rows = 6
 cols = 7
 
-# def min_max_no_pruning(board, depth, turn):
+
+def min_max_no_pruning(board, depth, turn):
+    pass
 #     if(depth == maxDepth or leafNode(board)):
 #         return (evalFunction(board), board)
 #
@@ -27,11 +29,12 @@ cols = 7
 #
 #     return (val, bestMove)
 
-def min_max_pruning(board, depth, turn, alpha, beta):
-    if(depth == maxDepth or leafNode(board)):
-        return (evalFunction(board), board)
 
-    if(turn == 0): # current node is max
+def min_max_pruning(board, depth, turn, alpha, beta):
+    if depth == maxDepth or leafNode(board):
+        return evalFunction(board), board
+
+    if turn == 0:   # current node is max
         val = -MAXNUMBER
     else:
         val = MAXNUMBER
@@ -41,10 +44,10 @@ def min_max_pruning(board, depth, turn, alpha, beta):
         rowPlayed = playColumn(board, col, turn+1)
         if rowPlayed == -1:
             continue
-        (childValue, nextMove) = min_max_pruning(board, depth+1, 1-turn, alpha, beta)
+        childValue, nextMove = min_max_pruning(board, depth+1, 1-turn, alpha, beta)
         board[rowPlayed][col] = 0
 
-        if(turn == 0):
+        if turn == 0:
             if val < childValue:
                 val = childValue
                 bestMove = col
@@ -52,14 +55,14 @@ def min_max_pruning(board, depth, turn, alpha, beta):
                 return val, col
             alpha = max(alpha, val)
         else:
-            if(val > childValue):
+            if val > childValue:
                 val = childValue
                 bestMove = col
             if val <= alpha:
                 return val, col
             beta = min(beta, val)
 
-    return (val, bestMove)
+    return val, bestMove
 
 
 def leafNode(board):
@@ -68,25 +71,11 @@ def leafNode(board):
 
 def playColumn(board, col, turn):
     for i in range(rows - 1, -1, -1):
-        if (board[i][col] == 0):
+        if board[i][col] == 0:
             board[i][col] = turn
             return i
     return -1
 
-
-
-# def possibleMoves(board, turn):
-#     currentMoves = []
-#     # you can SAVE in each row the BIT we can INSERT in to SAVE A FOR LOOP
-#     for j in range(cols):
-#         for i in range(rows-1, -1, -1):
-#             if(board[i][j] == 0):
-#                 temp = np.copy(board)
-#                 temp[i][j] = turn
-#
-#                 currentMoves.append(temp)
-#                 break
-#     return currentMoves
 
 def evalFunction(board):
     score = 0
@@ -117,6 +106,7 @@ def evalFunction(board):
 
     return score
 
+
 def evaluate_window(window):
     score = 0
     player_count = np.count_nonzero(window == 1)
@@ -129,8 +119,7 @@ def evaluate_window(window):
         score += 5
     elif player_count == 2 and empty_count == 2:
         score += 2
-
-    if agent_count == 4:
+    elif agent_count == 4:
         score -= 100
     elif agent_count == 3 and empty_count == 1:
         score -= 5
@@ -139,31 +128,17 @@ def evaluate_window(window):
 
     return score
 
-# def getValueForTurn(turn):
-#     if(turn == 0):
-#         return -1
-#     else:
-#         return 1
 
 def main():
     board = np.zeros((rows, cols), dtype=int)
 
     while True:
         move = input()
-        insertMove(board, int(move), 1)
+        playColumn(board, int(move), 1)
         (val, col) = min_max_pruning(board, 0, 1, -MAXNUMBER, MAXNUMBER)
         playColumn(board, col, 2)
         print(board)
 
-
-def insertMove(board, move, turn):
-    for i in range(rows-1, -1, -1):
-        if(board[i][move] == 0):
-            board[i][move] = turn
-            return board
-
-def print_board(board):
-    print(board)
 
 if __name__ == "__main__":
     main()

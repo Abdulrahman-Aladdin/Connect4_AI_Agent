@@ -14,7 +14,7 @@ class TreeGraphGUI:
         self.canvas.bind('<Shift-Button-5>', lambda event: self.canvas.xview_scroll(1, 'units'))
         self.canvas.pack(expand=True, fill='both')
 
-    def draw_tree(self, node, x, y, dx, dy, color, k):
+    def draw_tree(self, node, x, y, dx, dy, color):
         if node in self.adjacency_list:
             children = self.adjacency_list[node]
             num_children = len(children)
@@ -32,14 +32,14 @@ class TreeGraphGUI:
                     if color == 'red':
                         child_color = 'yellow'
                     self.canvas.create_line(x, y, x_child, y_child)
-                    self.draw_tree(child, x_child, y_child, dx, dy, child_color, k + 5)
+                    self.draw_tree(child, x_child, y_child, dx, dy, child_color)
 
             self.canvas.create_oval(x - radius, y - radius, x + radius, y + radius, fill=color)
             self.canvas.create_text(x, y, text=str(self.values[node]))
 
     def display_tree(self):
         root_node = list(self.adjacency_list.keys())[0]
-        self.draw_tree(root_node, 7000, 150, 14000, 100, 'red', 1)
+        self.draw_tree(root_node, 7000, 150, 14000, 100, 'red')
 
 
 def main():

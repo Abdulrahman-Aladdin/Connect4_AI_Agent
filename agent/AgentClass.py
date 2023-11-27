@@ -1,9 +1,14 @@
+from agent.minmax import *
+import numpy as np
+
+
 class Agent:
     def __init__(self, k, pruning):
         self.k = k
         self.pruning = pruning
 
     def play(self, state):
+        my_state = np.array(state)
         adjacency_list = {}
         for i in range(400):
             adjacency_list[i] = []
@@ -15,7 +20,11 @@ class Agent:
         values = []
         for i in range(400):
             values.append(i)
-        column = 5
+        val, column = 0, 0
+        if self.pruning:
+            val, column = min_max_pruning(my_state, self.k, 2, -MAXNUMBER, MAXNUMBER)
+        else:
+            val, column = min_max_no_pruning(my_state, self.k, 2)
         user_score = 2
         agent_score = 1
         state_value = 5
