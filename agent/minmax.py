@@ -14,10 +14,6 @@ cols = 7
 #         val = MAXNUMBER
 #     bestMove = board
 #
-#
-#
-#
-#
 #     for child in possibleMoves(board, turn+1):
 #         (childValue, nextMove) = min_max_no_pruning(child, depth+1, 1 - turn)
 #         if(turn == 0):
@@ -121,7 +117,7 @@ def evalFunction(board):
 
     return score
 
-def evaluate_window(window, turn):
+def evaluate_window(window):
     score = 0
     player_count = np.count_nonzero(window == 1)
     agent_count = np.count_nonzero(window == 2)
@@ -155,7 +151,6 @@ def main():
     while True:
         move = input()
         insertMove(board, int(move), 1)
-        # print_board(board)
         (val, col) = min_max_pruning(board, 0, 1, -MAXNUMBER, MAXNUMBER)
         playColumn(board, col, 2)
         print(board)
