@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 customtkinter = "*"
 packaging = "*"
+numpy = "*"
 
 [dev-packages]
 

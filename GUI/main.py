@@ -4,6 +4,7 @@ from tkinter import font
 from GameFrameClass import GameFrame
 from customWidgets.IntegerInputClass import IntegerInput
 from controller.ControllerClass import Controller
+from tree import *
 
 
 class App(ctk.CTk):
@@ -28,7 +29,7 @@ class App(ctk.CTk):
         self.k_value = ctk.StringVar(value='1')
 
         self.set_welcome_frame()
-        print(font.families())
+        # print(font.families())
         self.mainloop()
 
     def set_welcome_frame(self):
@@ -61,14 +62,23 @@ class App(ctk.CTk):
     def start_game(self):
         self.welcome_frame.pack_forget()
         self.game_frame.pack(expand=True, fill='both')
-        self.controller.initiate_agent(self.k_value.get(), self.pruning_option_var.get())
+        prun = False
+        if self.pruning_option_var.get() == 'With pruning':
+            prun = True
+        self.controller.initiate_agent(int(self.k_value.get()), prun)
 
     def get_agent_play(self, state):
-        column, user_score, agent_score, state_value = self.controller.agent_turn(state)
+        column, user_score, agent_score, state_value, adj_list, values = self.controller.agent_turn(state)
         self.user_score.set(f'User score: {user_score}')
         self.com_score.set(f'Agent score: {agent_score}')
         self.state_value.set(f'State value: {state_value}')
         self.game_frame.upper_frame.play_at(column)
+        self.show_tree(adj_list, values)
+
+    def show_tree(self, adj_list, values):
+        win = ctk.CTkToplevel(self)
+        tree_viewer = TreeGraphGUI(win, adj_list, values)
+        tree_viewer.display_tree()
 
 
 if __name__ == '__main__':
