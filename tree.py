@@ -42,18 +42,8 @@ class TreeGraphGUI:
         self.draw_tree(root_node, 7000, 150, 14000, 100, 'red')
 
 
-def main():
-    adjacency_list = {}
-    for i in range(400):
-        adjacency_list[i] = []
-    for i in range(57):
-        for j in range(1, 8):
-            adjacency_list[i].append(i * 7 + j)
-    for i in range(57, 400):
-        adjacency_list[i] = []
-    values = []
-    for i in range(400):
-        values.append(i)
+def show(adjacency_list, values):
+
     root = ctk.CTk()
     root.title("Tree Graph GUI")
 
@@ -63,5 +53,5 @@ def main():
     root.mainloop()
 
 
-if __name__ == "__main__":
-    main()
+# if __name__ == "__main__":
+

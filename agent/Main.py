@@ -2,6 +2,7 @@ import numpy as np
 from MinmaxPruning import *
 from MinmaxWithoutPruning import *
 from Utilities import *
+from tree import show
 import time
 
 
@@ -24,10 +25,19 @@ def main(algorithm, maxDepth):
     function = getGameFunction(algorithm)
 
     while True:
-        start_time = time.time()
-        val, col = function(board, 0, AI, -OO, OO, maxDepth)
-        end_time = time.time()
+        adj = {}
+        for i in range(20):
+            adj[i] = []
 
+        values = []
+        for i in range(20):
+            values.append(0)
+        start_time = time.time()
+        val, col = function(board, 0, AI, -OO, OO, maxDepth, values, adj, 0)
+        end_time = time.time()
+        show(adj, values)
+        print(adj)
+        print(values)
         print("Time Take: ", end_time - start_time)
         playColumn(board, col, AI)
         print(board)

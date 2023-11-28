@@ -16,6 +16,9 @@ def min_max_pruning(board, depth, turn, alpha, beta, maxDepth):
     else:
         val = OO
 
+    #At each node need to make adj = <Key, List<Pair<id, val>>>
+
+
     bestMove = 0
 
     for col in range(0, cols):
@@ -31,14 +34,18 @@ def min_max_pruning(board, depth, turn, alpha, beta, maxDepth):
             if childValue > val:
                 val = childValue
                 bestMove = col
-                alpha = max(val, alpha)
+
+            if val >= beta:
+                return val, bestMove
+            alpha = max(val, alpha)
         else:
             if childValue < val:
                 val = childValue
                 bestMove = col
-                beta = min(beta, val)
 
-        if alpha >= beta:  # pruning
-            return val, bestMove
+            if alpha >= val:
+                return val, bestMove
+            beta = min(beta, val)
+
 
     return val, bestMove
