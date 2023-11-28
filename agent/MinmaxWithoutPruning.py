@@ -26,6 +26,7 @@ def min_max_no_pruning(board, depth, turn, alpha, beta, maxDepth, values, adj, i
 
     # id = 0 -> 1 2 3 4 5 6 7
     # id = 1 ->
+    adj[id] = []
     for col in range(0, cols):
         row_played = playColumn(board, col, turn)
         if row_played == -1:
