@@ -5,6 +5,7 @@ cols = 7
 AI = '1'
 PLAYER = '2'
 
+
 def isLeafNode(board):
     return all(cell != '0' for row in board for cell in row)
 
@@ -13,6 +14,7 @@ def evalLeafNode(board):
     Aiscore = count_consecutive_ones(board, AI)
     playerScore = count_consecutive_ones(board, PLAYER)
     return Aiscore - playerScore
+
 
 def count_consecutive_ones(array, val):
     rows, cols = array.shape
@@ -97,8 +99,8 @@ def evalFunction(board):
 
 def evaluate_window(window):
     score = 0
-    AI_count = np.count_nonzero(window == '1')
-    PLAYER_count = np.count_nonzero(window == '2')
+    AI_count = np.count_nonzero(window == AI)
+    PLAYER_count = np.count_nonzero(window == PLAYER)
     empty_count = np.count_nonzero(window == '0')
 
     if PLAYER_count == 4:

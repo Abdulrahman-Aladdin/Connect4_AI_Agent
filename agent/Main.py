@@ -1,7 +1,7 @@
 import numpy as np
-from MinmaxPruning import *
-from MinmaxWithoutPruning import *
-from Utilities import *
+from agent.MinmaxPruning import *
+from agent.MinmaxWithoutPruning import *
+from agent.Utilities import *
 from tree import show
 import time
 
@@ -27,12 +27,8 @@ def main(algorithm, maxDepth):
     state = State(board)
     while True:
         adj = {}
-        for i in range(20):
-            adj[i] = []
+        values = {}
 
-        values = []
-        for i in range(20):
-            values.append(0)
         start_time = time.time()
         val, col = function(board, 0, AI, -OO, OO, maxDepth, values, adj, 0)
         end_time = time.time()

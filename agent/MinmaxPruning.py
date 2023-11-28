@@ -1,5 +1,5 @@
-from Utilities import *
-from State import State
+from agent.Utilities import *
+from agent.State import State
 OO = 1e9
 AI = '1'
 PLAYER = '2'

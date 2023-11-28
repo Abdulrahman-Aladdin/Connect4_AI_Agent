@@ -20,7 +20,7 @@ class UpperFrame(ctk.CTkFrame):
         self.agent_fn = agent_fn
 
         # initialize the back-board
-        self.board = [[0 for _ in range(self.col)] for _ in range(self.row)]
+        self.board = [['0' for _ in range(self.col)] for _ in range(self.row)]
 
         self.rowconfigure(tuple(range(self.row + 1)), weight=1, uniform='a')
         self.columnconfigure(tuple(range(self.col)), weight=1, uniform='b')
@@ -39,7 +39,7 @@ class UpperFrame(ctk.CTkFrame):
 
     def play_at(self, i):
         for j in range(self.row - 1, -1, -1):
-            if self.board[j][i] == 0:     # found an empty place in that column
+            if self.board[j][i] == '0':     # found an empty place in that column
                 self.setTheNewState(j, i)   # update the ui, back-board, and the turn
                 break
 
@@ -48,7 +48,7 @@ class UpperFrame(ctk.CTkFrame):
             self.disableInteractions()
 
     def isTheGameEnded(self):
-        return all(cell != 0 for row in self.board for cell in row)
+        return all(cell != '0' for row in self.board for cell in row)
 
     def disableInteractions(self):
         for row in self.board_btns:
@@ -63,12 +63,15 @@ class UpperFrame(ctk.CTkFrame):
     def setTheNewState(self, i, j):
         if self.turn == 1:  # user turn
             self.board_btns[i][j].configure(image=self.red_img)
-            self.board[i][j] = 1
+            self.board[i][j] = '2'
             self.turn = -1
             self.disableInteractions()
+            if self.isTheGameEnded():
+                print('game over!')
+                return
             self.agent_fn(self.board)
         else:
             self.board_btns[i][j].configure(image=self.blue_img)
-            self.board[i][j] = 2
+            self.board[i][j] = '1'
             self.turn = 1
             self.enableInteractions()

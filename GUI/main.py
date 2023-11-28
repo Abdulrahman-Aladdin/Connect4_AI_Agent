@@ -77,7 +77,7 @@ class App(ctk.CTk):
 
     def show_tree(self, adj_list, values):
         win = ctk.CTkToplevel(self)
-        tree_viewer = TreeGraphGUI(win, adj_list, values)
+        tree_viewer = TreeGraphGUI(win, adj_list, values, int(self.k_value.get()))
         tree_viewer.display_tree()
 
 
