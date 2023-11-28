@@ -2,11 +2,12 @@ class State:
     def __init__(self, board):
         self.bitboard = [0 for _ in range(2)]
         self.height = [0 for _ in range(7)] # stores the first empty bit
-        self.counter = 0
+        self.counter = 1
         self.moves = [0 for _ in range(43)]
         self.convertToBitboard(board)
 
     def convertToBitboard(self, board):
+        print(board)
         for col in range(7):
             for row in range(6):
                 val = board[row][col]
@@ -80,3 +81,11 @@ class State:
 
     def getTurn(self):
         return self.counter & 1
+
+    def getScore(self, turn):
+        fives = self.checkFiveAndBeyond(self.bitboard[turn])
+        fours = self.checkFourAndBeyond(self.bitboard[turn])
+        threes = self.checkThreeAndBeyond(self.bitboard[turn])
+        twos = self.checkTwoAndBeyond(self.bitboard[turn])
+        baseScore = 100
+        return fives * 20 * baseScore + fours * baseScore * 10 + threes * 0.4 * baseScore + twos * 0.1 * baseScore

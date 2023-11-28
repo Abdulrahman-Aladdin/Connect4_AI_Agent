@@ -1,48 +1,48 @@
 from agent.Utilities import *
 from agent.State import State
+
 OO = 1e9
 AI = '1'
 PLAYER = '2'
 
 
-def min_max_pruning(state: State, depth, turn, alpha, beta, maxDepth):
-    # if state.isLeafNode():
-    #     return evalLeafNode(state), state
+def min_max_pruning(state: State, depth, turn, alpha, beta, maxDepth, values, adj, id):
+    if state.isLeafNode():
+        val, col = state.checkFourAndBeyond(state.bitboard[0]) - state.checkFourAndBeyond(state.bitboard[1]), -1
+        adj[id] = []
+        values[id] = val
+        return val, col
     if depth == maxDepth:
-        return getScore(state.checkFiveAndBeyond(state.bitboard[0]), 
-                        state.checkFourAndBeyond(state.bitboard[0]), 
-                        state.checkThreeAndBeyond(state.bitboard[0]), 
-                        state.checkTwoAndBeyond(state.bitboard[0])) - getScore(state.checkFiveAndBeyond(state.bitboard[1]), 
-                        state.checkFourAndBeyond(state.bitboard[1]), 
-                        state.checkThreeAndBeyond(state.bitboard[1]), 
-                        state.checkTwoAndBeyond(state.bitboard[1])), state
-        # return state.checkFourAndBeyond(state.bitboard[0]) - state.checkFourAndBeyond(state.bitboard[1]), state
+        ans = state.getScore(0) - state.getScore(1)
+        adj[id] = []
+        values[id] = ans
+        return ans, -1
 
     if turn == AI:
         val = -OO
     else:
         val = OO
 
-    #At each node need to make adj = <Key, List<Pair<id, val>>>
-
+    # At each node need to make adj = <Key, List<Pair<id, val>>>
 
     bestMove = 0
-
+    adj[id] = []
     for col in state.getPossibleMoves():
         state.makeMove(col)
-        # rowPlayed = playColumn(state, col, turn)
-        # if rowPlayed == -1:
-        #     continue
+
+        child_id = id * 7 + col + 1
+        adj[id].append(child_id)
 
         nextTurn = PLAYER if turn == AI else AI
-        (childValue, nextMove) = min_max_pruning(state, depth + 1, nextTurn, alpha, beta, maxDepth)
-        # state[rowPlayed][col] = '0'
+        (childValue, nextMove) = min_max_pruning(state, depth + 1, nextTurn, alpha, beta, maxDepth,
+                                                 values, adj, child_id)
         state.undoMove()
+
         if turn == AI:
             if childValue > val:
                 val = childValue
                 bestMove = col
-
+            values[id] = val
             if val >= beta:
                 return val, bestMove
             alpha = max(val, alpha)
@@ -50,13 +50,10 @@ def min_max_pruning(state: State, depth, turn, alpha, beta, maxDepth):
             if childValue < val:
                 val = childValue
                 bestMove = col
-
+            values[id] = val
             if alpha >= val:
                 return val, bestMove
             beta = min(beta, val)
 
-
     return val, bestMove
 
-def getScore(fives, fours, threes, twos):
-    return 

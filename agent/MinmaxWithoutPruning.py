@@ -1,3 +1,4 @@
+from agent.State import State
 from agent.Utilities import *
 
 OO = 1e9
@@ -5,14 +6,14 @@ AI = '1'
 PLAYER = '2'
 
 
-def min_max_no_pruning(board, depth, turn, alpha, beta, maxDepth, values, adj, id):
-    if isLeafNode(board):
-        val, col = evalLeafNode(board), -1
+def min_max_no_pruning(state, depth, turn, alpha, beta, maxDepth, values, adj, id):
+    if state.isLeafNode():
+        val, col = state.checkFourAndBeyond(state.bitboard[0]) - state.checkFourAndBeyond(state.bitboard[1]), -1
         adj[id] = []
         values[id] = val
         return val, col
     elif depth == maxDepth:
-        ans = evalFunction(board)
+        ans = state.getScore(0) - state.getScore(1)
         adj[id] = []
         values[id] = ans
         return ans, -1
@@ -27,16 +28,15 @@ def min_max_no_pruning(board, depth, turn, alpha, beta, maxDepth, values, adj, i
     # id = 0 -> 1 2 3 4 5 6 7
     # id = 1 ->
     adj[id] = []
-    for col in range(0, cols):
-        row_played = playColumn(board, col, turn)
-        if row_played == -1:
-            continue
+    for col in state.getPossibleMoves():
+        state.makeMove(col)
+
         child_id = id * 7 + col + 1
         adj[id].append(child_id)
         next_turn = PLAYER if turn == AI else AI
-        child_value, next_move = min_max_no_pruning(board, depth + 1, next_turn, alpha, beta,
+        child_value, next_move = min_max_no_pruning(state, depth + 1, next_turn, alpha, beta,
                                                     maxDepth, values, adj, child_id)
-        board[row_played][col] = '0'
+        state.undoMove()
 
         if turn == AI:
             if child_value > val:

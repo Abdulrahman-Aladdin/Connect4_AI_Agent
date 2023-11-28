@@ -69,7 +69,7 @@ class UpperFrame(ctk.CTkFrame):
             if self.isTheGameEnded():
                 print('game over!')
                 return
-            self.agent_fn(self.board)
+            self.agent_fn(j)
         else:
             self.board_btns[i][j].configure(image=self.blue_img)
             self.board[i][j] = '1'
