@@ -24,6 +24,7 @@ def main(algorithm, maxDepth):
     board = np.array(temp)
     function = getGameFunction(algorithm)
 
+    state = State(board)
     while True:
         adj = {}
         for i in range(20):
@@ -39,10 +40,12 @@ def main(algorithm, maxDepth):
         print(adj)
         print(values)
         print("Time Take: ", end_time - start_time)
+        state.makeMove(col)
         playColumn(board, col, AI)
         print(board)
         playerMove = int(input("Enter move: "))
         playColumn(board, playerMove, PLAYER)
+        state.makeMove(playerMove)
 
 
 if __name__ == "__main__":
