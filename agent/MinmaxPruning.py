@@ -10,12 +10,12 @@ def min_max_pruning(state: State, depth, turn, alpha, beta, maxDepth, values, ad
     if state.isLeafNode():
         val, col = state.checkFourAndBeyond(state.bitboard[0]) - state.checkFourAndBeyond(state.bitboard[1]), -1
         adj[id] = []
-        values[id] = val
+        values[id].append(int(val))
         return val, col
     if depth == maxDepth:
         ans = state.getScore(0) - state.getScore(1)
         adj[id] = []
-        values[id] = ans
+        values[id].append(int(ans))
         return ans, -1
 
     if turn == AI:
@@ -32,6 +32,7 @@ def min_max_pruning(state: State, depth, turn, alpha, beta, maxDepth, values, ad
 
         child_id = id * 7 + col + 1
         adj[id].append(child_id)
+        values[child_id] = [col]
 
         nextTurn = PLAYER if turn == AI else AI
         (childValue, nextMove) = min_max_pruning(state, depth + 1, nextTurn, alpha, beta, maxDepth,
@@ -42,7 +43,7 @@ def min_max_pruning(state: State, depth, turn, alpha, beta, maxDepth, values, ad
             if childValue > val:
                 val = childValue
                 bestMove = col
-            values[id] = val
+            values[id].append(int(val))
             if val >= beta:
                 return val, bestMove
             alpha = max(val, alpha)
@@ -50,7 +51,7 @@ def min_max_pruning(state: State, depth, turn, alpha, beta, maxDepth, values, ad
             if childValue < val:
                 val = childValue
                 bestMove = col
-            values[id] = val
+            values[id].append(int(val))
             if alpha >= val:
                 return val, bestMove
             beta = min(beta, val)

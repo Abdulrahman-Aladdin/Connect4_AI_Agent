@@ -10,19 +10,9 @@ class TreeGraphGUI:
         self.values = values
         self.adjacency_list = adjacency_list
         self.no_of_nodes = len(self.values)
-        self.radius = 15
+        self.radius = 20
         self.gap = 10
         self.no_of_levels = levels + 1
-        # if self.no_of_nodes == 1:
-        #     self.no_of_levels = 1
-        # elif self.no_of_nodes < 9:
-        #     self.no_of_levels = 2
-        # elif self.no_of_nodes < 58:
-        #     self.no_of_levels = 3
-        # elif self.no_of_nodes < 401:
-        #     self.no_of_levels = 4
-        # else:
-        #     self.no_of_levels = 5
         self.no_of_leaves = math.pow(7, self.no_of_levels - 1)
         self.width = self.no_of_leaves * (self.gap + 2 * self.radius) + 3 * self.gap
         self.dx = (self.gap + 2 * self.radius) * math.pow(7, self.no_of_levels - 1)
@@ -60,7 +50,7 @@ class TreeGraphGUI:
                     self.draw_tree(child, x_child, y_child, dx, dy, child_color)
 
             self.canvas.create_oval(x - self.radius, y - self.radius, x + self.radius, y + self.radius, fill=color)
-            self.canvas.create_text(x, y, text=str(self.values[node]))
+            self.canvas.create_text(x, y, text=f'{self.values[node][1]}, {self.values[node][0]}')
 
     def display_tree(self):
         root_node = list(self.adjacency_list.keys())[0]
