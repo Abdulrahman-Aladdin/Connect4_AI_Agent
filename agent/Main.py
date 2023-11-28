@@ -22,17 +22,20 @@ def main(algorithm, maxDepth):
     temp = [['0' for _ in range(cols)] for _ in range(rows)]
     board = np.array(temp)
     function = getGameFunction(algorithm)
-
+    
+    state = State(board)
     while True:
         start_time = time.time()
-        val, col = function(board, 0, AI, -OO, OO, maxDepth)
+        val, col = function(state, 0, AI, -OO, OO, maxDepth)
         end_time = time.time()
 
         print("Time Take: ", end_time - start_time)
+        state.makeMove(col)
         playColumn(board, col, AI)
         print(board)
         playerMove = int(input("Enter move: "))
         playColumn(board, playerMove, PLAYER)
+        state.makeMove(playerMove)
 
 
 if __name__ == "__main__":
