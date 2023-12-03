@@ -7,6 +7,7 @@ from agent.Utilities import count_consecutive_ones
 
 class Agent:
     def __init__(self, k, pruning):
+        self.expandedNodes = [0]
         self.k = k
         self.method = None
         if pruning:
@@ -20,7 +21,8 @@ class Agent:
         adj = {}
         values = {0: [-1]}
         self.state.makeMove(col)
-        val, column = self.method(self.state, 0, AI, -OO, OO, self.k, values, adj, 0)
+        val, column = self.method(self.state, 0, AI, -OO, OO, self.k, values, adj, 0, self.expandedNodes)
+        print(self.expandedNodes)
         self.state.makeMove(column)
         return (column, self.state.checkFourAndBeyond(self.state.bitboard[1]),
                 self.state.checkFourAndBeyond(self.state.bitboard[0]), val, adj, values)
