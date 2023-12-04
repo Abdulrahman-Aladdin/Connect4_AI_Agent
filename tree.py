@@ -16,9 +16,6 @@ class TreeGraphGUI:
         self.no_of_leaves = math.pow(7, self.no_of_levels - 1)
         self.width = self.no_of_leaves * (self.gap + 2 * self.radius) + 3 * self.gap
         self.dx = (self.gap + 2 * self.radius) * math.pow(7, self.no_of_levels - 1)
-        print('width -> ', self.width)
-        print('leaves -> ', self.no_of_leaves)
-        print('nodes -> ', self.no_of_nodes)
         self.canvas = ctk.CTkCanvas(master=master, width=1200, height=1000, scrollregion=(0, 0, self.width, 2000))
 
         self.scroll_bar = ctk.CTkScrollbar(master=master, orientation='horizontal', command=self.canvas.xview)

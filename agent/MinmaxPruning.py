@@ -44,18 +44,22 @@ def min_max_pruning(state: State, depth, turn, alpha, beta, maxDepth, values, ad
             if childValue > val:
                 val = childValue
                 bestMove = col
-            values[id].append(int(val))
+
             if val >= beta:
+                values[id].append(int(val))
                 return val, bestMove
+
             alpha = max(val, alpha)
         else:
             if childValue < val:
                 val = childValue
                 bestMove = col
-            values[id].append(int(val))
+
             if alpha >= val:
+                values[id].append(int(val))
                 return val, bestMove
             beta = min(beta, val)
 
+    values[id].append(int(val))
     return val, bestMove
 
