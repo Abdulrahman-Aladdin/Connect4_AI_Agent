@@ -23,19 +23,20 @@ def main(algorithm, maxDepth):
     temp = [['0' for _ in range(cols)] for _ in range(rows)]
     board = np.array(temp)
     function = getGameFunction(algorithm)
+    expandedNodes = 0
 
     state = State(board)
     while True:
         adj = {}
         values = {}
-
         start_time = time.time()
-        val, col = function(board, 0, AI, -OO, OO, maxDepth, values, adj, 0)
+        val, col = function(board, 0, AI, -OO, OO, maxDepth, values, adj, 0, expandedNodes)
         end_time = time.time()
         show(adj, values)
         print(adj)
         print(values)
         print("Time Take: ", end_time - start_time)
+        print(expandedNodes)
         state.makeMove(col)
         playColumn(board, col, AI)
         print(board)
