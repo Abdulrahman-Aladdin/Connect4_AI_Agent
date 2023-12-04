@@ -63,10 +63,17 @@ class State:
         vertical = bitboard_current_player &  (bitboard_current_player >> 1)
         return self.count_ones_in_binary(left_diagonal) + self.count_ones_in_binary(right_diagonal) + self.count_ones_in_binary(horizontal) + self.count_ones_in_binary(vertical) 
 
-    def count_ones_in_binary(self, number):
-        binary_representation = bin(number)[2:]  # [2:] to remove the '0b' prefix
-        count_ones = binary_representation.count('1')
-        return count_ones
+    # def count_ones_in_binary(self, number):
+    #     binary_representation = bin(number)[2:]  # [2:] to remove the '0b' prefix
+    #     count_ones = binary_representation.count('1')
+    #     return count_ones
+
+    def count_ones_in_binary(self, n):
+        count = 0
+        while n > 0:
+            count = count + 1
+            n = n & (n - 1)
+        return count
 
     def getPossibleMoves(self):
         possibleMoves = []

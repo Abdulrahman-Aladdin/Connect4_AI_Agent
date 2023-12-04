@@ -12,7 +12,6 @@ class App(ctk.CTk):
         super().__init__()
         self.geometry(f'{WIN_WIDTH}x{WIN_HEIGHT}')
         self.title(TITLE)
-
         self.com_score = ctk.StringVar(value='Agent score: 0')
         self.user_score = ctk.StringVar(value='User score: 0')
         self.state_value = ctk.StringVar(value='State value: 0')
@@ -73,7 +72,7 @@ class App(ctk.CTk):
         self.com_score.set(f'Agent score: {agent_score}')
         self.state_value.set(f'State value: {state_value}')
         self.game_frame.upper_frame.play_at(column)
-        self.show_tree(adj_list, values)
+        # self.show_tree(adj_list, values)
 
     def show_tree(self, adj_list, values):
         win = ctk.CTkToplevel(self)
