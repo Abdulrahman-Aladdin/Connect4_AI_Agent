@@ -88,4 +88,4 @@ class State:
         threes = self.checkThreeAndBeyond(self.bitboard[turn])
         twos = self.checkTwoAndBeyond(self.bitboard[turn])
         baseScore = 100
-        return fives * 20 * baseScore + fours * baseScore * 10 + threes * 0.4 * baseScore + twos * 0.1 * baseScore
+        return fives * 20 * baseScore + fours * baseScore * 10 + threes * 0.1 * baseScore + twos * 0.05 * baseScore
